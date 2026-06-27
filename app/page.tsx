@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import AutomationOrb from "@/components/AutomationOrb";
+import AutomationFlowHero from "@/components/AutomationFlowHero";
 
 type Lang = "en" | "pl";
 
@@ -47,7 +47,6 @@ const content = {
       "Websites and landing pages",
       "Internal business tools",
     ],
-    visualSteps: ["Input", "Automation", "Output"],
     chips: ["Content", "Leads", "Emails", "Reports", "Websites"],
   },
   pl: {
@@ -90,7 +89,6 @@ const content = {
       "Strony i landing page",
       "Narzędzia wewnętrzne dla firm",
     ],
-    visualSteps: ["Input", "Automatyzacja", "Output"],
     chips: ["Content", "Leady", "Maile", "Raporty", "Strony"],
   },
 } as const;
@@ -186,23 +184,8 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="relative mx-auto my-6 h-52 max-w-sm">
-                <AutomationOrb />
-
-                {t.visualSteps.map((step, index) => (
-                  <div
-                    key={step}
-                    className={`absolute rounded-2xl border border-white/10 bg-white/[0.07] px-3 py-1.5 text-xs text-zinc-300 backdrop-blur ${
-                      index === 0
-                        ? "left-6 top-3"
-                        : index === 1
-                          ? "right-4 top-20"
-                          : "bottom-3 left-16"
-                    }`}
-                  >
-                    {step}
-                  </div>
-                ))}
+              <div className="relative mx-auto my-6 h-72 max-w-full">
+                <AutomationFlowHero />
               </div>
 
               <div className="flex flex-wrap gap-2">
