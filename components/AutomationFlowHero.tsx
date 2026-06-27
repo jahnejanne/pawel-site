@@ -23,6 +23,10 @@ const outputNodes: FlowNode[] = [
   { title: "Report", detail: "Done", x: 2.55, y: -0.86, color: 0x22d3ee },
 ];
 
+type MaterialWithMap = THREE.Material & {
+  map?: THREE.Texture | null;
+};
+
 export default function AutomationFlowHero() {
   const mountRef = useRef<HTMLDivElement | null>(null);
 
@@ -534,8 +538,10 @@ function disposeObject(object: THREE.Object3D) {
 }
 
 function disposeMaterial(material: THREE.Material) {
-  if ("map" in material && material.map) {
-    material.map.dispose();
+  const materialWithMap = material as MaterialWithMap;
+
+  if (materialWithMap.map) {
+    materialWithMap.map.dispose();
   }
 
   material.dispose();
