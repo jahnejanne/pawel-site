@@ -8,35 +8,38 @@ type Lang = "en" | "pl";
 
 const content = {
   en: {
-    eyebrow: "AI • Automation • Websites",
+    eyebrow: "AI Systems • Automation • Software",
     title: "Paweł Giemza",
     subtitle:
-      "I help companies save time, create faster and automate repetitive work with AI, automation and custom software.",
-    subline: "Tell me what you do manually — I’ll help you automate it.",
-    cta: "Start a project",
+      "I build AI systems that replace repetitive work, automate business processes and create software tailored to your company.",
+    subline:
+      "Describe the manual work in your company — I’ll tell you what can be automated.",
+    cta: "Describe your problem",
     pricingCta: "See examples",
     available: "Available now",
+    priceLabel: "Starting from",
     price: "50 PLN/h",
     priceHint: "approx. €12/h",
     priceNote: "Fixed-price projects also available.",
     visualTitle: "AI Automation",
     visualSubtitle: "Manual work → automated workflow",
-    servicesTitle: "What I can help with",
-    contactTitle: "Contact",
+    cardsTitle: "What can I automate?",
+    servicesTitle: "Examples",
+    contactTitle: "Describe your problem",
     contactText:
-      "Send a short message with what you want to automate, improve or build.",
+      "Send a short message with what you do manually. I’ll tell you whether AI or automation can solve it.",
     cards: [
       [
-        "AI for content",
-        "Reels, posts, scripts, captions, thumbnails and repeatable content workflows.",
+        "Content workflows",
+        "Reels, posts, scripts, captions, thumbnails and repeatable publishing workflows.",
       ],
       [
-        "Business automation",
-        "Emails, forms, reports, CRM updates, lead handling and repetitive office work.",
+        "Office automation",
+        "Emails, documents, reports, CRM updates, lead handling and repetitive admin work.",
       ],
       [
         "Websites & tools",
-        "Landing pages, internal tools, dashboards, MVPs and custom software.",
+        "Landing pages, internal tools, dashboards, MVPs and custom business software.",
       ],
     ],
     services: [
@@ -44,37 +47,43 @@ const content = {
       "AI content workflows",
       "Lead generation automation",
       "Email and document automation",
+      "Reports and dashboards",
+      "Customer support automation",
+      "CRM and sales workflows",
       "Websites and landing pages",
       "Internal business tools",
     ],
     chips: ["Content", "Leads", "Emails", "Reports", "Websites"],
   },
   pl: {
-    eyebrow: "AI • Automatyzacja • Strony",
+    eyebrow: "Systemy AI • Automatyzacja • Software",
     title: "Paweł Giemza",
     subtitle:
-      "Pomagam firmom oszczędzać czas, szybciej tworzyć i automatyzować powtarzalną pracę dzięki AI, automatyzacji i custom software.",
-    subline: "Powiedz, co robisz ręcznie — pomogę Ci to zautomatyzować.",
-    cta: "Zacznij projekt",
+      "Buduję systemy AI, które zastępują powtarzalną pracę, automatyzują procesy firmowe i tworzą software dopasowany do Twojej firmy.",
+    subline:
+      "Opisz ręczną pracę w swojej firmie — powiem Ci, co da się zautomatyzować.",
+    cta: "Opisz problem",
     pricingCta: "Zobacz przykłady",
     available: "Dostępny od zaraz",
+    priceLabel: "Od",
     price: "50 PLN/h",
     priceHint: "ok. €12/h",
     priceNote: "Możliwa też wycena fixed price.",
     visualTitle: "Automatyzacja AI",
     visualSubtitle: "Ręczna praca → automatyczny workflow",
-    servicesTitle: "W czym mogę pomóc",
-    contactTitle: "Kontakt",
+    cardsTitle: "Co mogę zautomatyzować?",
+    servicesTitle: "Przykłady",
+    contactTitle: "Opisz problem",
     contactText:
-      "Napisz krótko, co chcesz zautomatyzować, poprawić albo zbudować.",
+      "Napisz krótko, co robisz ręcznie. Powiem Ci, czy AI albo automatyzacja mogą to rozwiązać.",
     cards: [
       [
-        "AI do contentu",
+        "Content workflow",
         "Rolki, posty, skrypty, opisy, miniatury i powtarzalne workflow do publikacji.",
       ],
       [
-        "Automatyzacja firmy",
-        "Maile, formularze, raporty, CRM, obsługa leadów i powtarzalna praca biurowa.",
+        "Automatyzacja biura",
+        "Maile, dokumenty, raporty, CRM, obsługa leadów i powtarzalna praca administracyjna.",
       ],
       [
         "Strony i narzędzia",
@@ -86,6 +95,9 @@ const content = {
       "Workflow AI do contentu",
       "Automatyzacja lead generation",
       "Automatyzacja maili i dokumentów",
+      "Raporty i dashboardy",
+      "Automatyzacja obsługi klienta",
+      "CRM i procesy sprzedażowe",
       "Strony i landing page",
       "Narzędzia wewnętrzne dla firm",
     ],
@@ -102,7 +114,7 @@ export default function Home() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(124,58,237,0.36),transparent_34%),radial-gradient(circle_at_82%_8%,rgba(14,165,233,0.24),transparent_30%),radial-gradient(circle_at_50%_72%,rgba(79,70,229,0.16),transparent_42%),linear-gradient(180deg,#070817_0%,#02030a_48%,#000_100%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:72px_72px] opacity-20 [mask-image:radial-gradient(circle_at_top,black,transparent_70%)]" />
 
-      <section className="relative mx-auto flex max-w-6xl flex-col">
+      <section className="relative mx-auto flex max-w-7xl flex-col">
         <header className="flex items-center justify-between">
           <div className="flex h-10 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-xs font-semibold tracking-widest text-violet-300 backdrop-blur">
             PG
@@ -125,7 +137,7 @@ export default function Home() {
           </div>
         </header>
 
-        <section className="grid min-h-[74vh] items-center gap-12 py-20 lg:grid-cols-[1.08fr_0.92fr]">
+        <section className="grid min-h-[72vh] items-center gap-12 py-12 lg:grid-cols-[0.92fr_1.08fr]">
           <div>
             <p className="mb-6 text-sm font-medium uppercase tracking-[0.35em] text-zinc-400">
               {t.eyebrow}
@@ -160,8 +172,8 @@ export default function Home() {
             </div>
           </div>
 
-          <aside className="relative overflow-hidden rounded-[2.25rem] border border-white/10 bg-white/[0.055] p-7 shadow-2xl shadow-violet-950/30 backdrop-blur-xl">
-            <div className="relative rounded-[1.75rem] border border-white/10 bg-black/30 p-6">
+          <aside className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.055] p-7 shadow-2xl shadow-violet-950/30 backdrop-blur-xl">
+            <div className="relative rounded-[1.9rem] border border-white/10 bg-black/30 p-6">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm font-medium text-white">
@@ -176,7 +188,10 @@ export default function Home() {
                   id="pricing"
                   className="rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 text-right backdrop-blur"
                 >
-                  <p className="text-xs uppercase tracking-[0.2em] text-violet-300">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+                    {t.priceLabel}
+                  </p>
+                  <p className="mt-1 text-xs uppercase tracking-[0.2em] text-violet-300">
                     {t.available}
                   </p>
                   <p className="mt-2 text-xl font-semibold">{t.price}</p>
@@ -184,7 +199,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="relative mx-auto my-6 h-72 max-w-full">
+              <div className="relative mx-auto my-8 h-80 max-w-full">
                 <AutomationFlowHero />
               </div>
 
@@ -213,19 +228,25 @@ export default function Home() {
           </aside>
         </section>
 
-        <div className="grid gap-4 sm:grid-cols-3">
-          {t.cards.map(([title, description]) => (
-            <div
-              key={title}
-              className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-7 backdrop-blur-xl transition hover:bg-white/[0.07]"
-            >
-              <h2 className="text-lg font-semibold">{title}</h2>
-              <p className="mt-4 text-sm leading-6 text-zinc-400">
-                {description}
-              </p>
-            </div>
-          ))}
-        </div>
+        <section className="border-t border-white/10 pt-12">
+          <h2 className="text-4xl font-semibold tracking-tight">
+            {t.cardsTitle}
+          </h2>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {t.cards.map(([title, description]) => (
+              <div
+                key={title}
+                className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-7 backdrop-blur-xl transition hover:bg-white/[0.07]"
+              >
+                <h3 className="text-lg font-semibold">{title}</h3>
+                <p className="mt-4 text-sm leading-6 text-zinc-400">
+                  {description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <section id="services" className="mt-24 border-t border-white/10 pt-12">
           <h2 className="text-4xl font-semibold tracking-tight">
@@ -238,6 +259,7 @@ export default function Home() {
                 key={service}
                 className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 text-zinc-300 backdrop-blur-xl transition hover:bg-white/[0.07]"
               >
+                <span className="mr-3 text-violet-300">✓</span>
                 {service}
               </div>
             ))}
@@ -245,11 +267,11 @@ export default function Home() {
         </section>
 
         <section className="mt-24 border-t border-white/10 py-12">
-          <h2 className="text-4xl font-semibold tracking-tight">
+          <h2 className="text-5xl font-semibold tracking-tight">
             {t.contactTitle}
           </h2>
 
-          <p className="mt-6 max-w-2xl leading-7 text-zinc-400">
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-400">
             {t.contactText}
           </p>
 

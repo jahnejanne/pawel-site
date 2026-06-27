@@ -3,6 +3,26 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
+type FlowNode = {
+  title: string;
+  detail: string;
+  x: number;
+  y: number;
+  color: number;
+};
+
+const inputNodes: FlowNode[] = [
+  { title: "Email", detail: "New lead", x: -2.65, y: 0.92, color: 0xa78bfa },
+  { title: "PDF", detail: "Document", x: -2.9, y: 0.02, color: 0x818cf8 },
+  { title: "Form", detail: "Request", x: -2.55, y: -0.86, color: 0xc084fc },
+];
+
+const outputNodes: FlowNode[] = [
+  { title: "CRM", detail: "Updated", x: 2.65, y: 0.92, color: 0x67e8f9 },
+  { title: "Reply", detail: "Ready", x: 2.9, y: 0.02, color: 0x38bdf8 },
+  { title: "Report", detail: "Done", x: 2.55, y: -0.86, color: 0x22d3ee },
+];
+
 export default function AutomationFlowHero() {
   const mountRef = useRef<HTMLDivElement | null>(null);
 
@@ -12,8 +32,8 @@ export default function AutomationFlowHero() {
 
     const scene = new THREE.Scene();
 
-    const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
-    camera.position.set(0, 0.2, 6.4);
+    const camera = new THREE.PerspectiveCamera(31, 1, 0.1, 100);
+    camera.position.set(0, 0.08, 6.65);
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -31,57 +51,58 @@ export default function AutomationFlowHero() {
     scene.add(group);
 
     const processor = createProcessor();
-    const inputCard = createGlassCard(
-      "Request",
-      "Email received",
-      -2.25,
-      0.35,
-      0xa78bfa,
-    );
-    const outputCard = createGlassCard(
-      "Done",
-      "CRM + reply ready",
-      2.25,
-      -0.3,
-      0x67e8f9,
-    );
+    group.add(processor);
 
-    group.add(processor, inputCard, outputCard);
+    const inputCards = inputNodes.map(createGlassCard);
+    const outputCards = outputNodes.map(createGlassCard);
+    [...inputCards, ...outputCards].forEach((card) => group.add(card));
 
-    const inputPath = createLine(
-      new THREE.Vector3(-1.62, 0.35, 0),
-      new THREE.Vector3(-0.68, 0.06, 0),
-      0xa78bfa,
-    );
+    const lines: THREE.Line[] = [];
 
-    const outputPath = createLine(
-      new THREE.Vector3(0.68, -0.04, 0),
-      new THREE.Vector3(1.62, -0.3, 0),
-      0x67e8f9,
-    );
+    inputNodes.forEach((node) => {
+      const line = createLine(
+        new THREE.Vector3(node.x + 0.58, node.y, 0),
+        new THREE.Vector3(-0.72, node.y * 0.25, 0.05),
+        node.color,
+      );
+      lines.push(line);
+      group.add(line);
+    });
 
-    group.add(inputPath, outputPath);
+    outputNodes.forEach((node) => {
+      const line = createLine(
+        new THREE.Vector3(0.72, node.y * 0.25, 0.05),
+        new THREE.Vector3(node.x - 0.58, node.y, 0),
+        node.color,
+      );
+      lines.push(line);
+      group.add(line);
+    });
 
     const packets = [
       createPacket(0xa78bfa),
+      createPacket(0x818cf8),
+      createPacket(0xc084fc),
       createPacket(0x67e8f9),
       createPacket(0x38bdf8),
+      createPacket(0x22d3ee),
+      createPacket(0xffffff),
     ];
 
     packets.forEach((packet) => group.add(packet));
 
     scene.add(new THREE.AmbientLight(0xffffff, 1.7));
 
-    const keyLight = new THREE.PointLight(0xffffff, 4.2, 9);
-    keyLight.position.set(0, 2.7, 4);
+    const keyLight = new THREE.PointLight(0xffffff, 4.6, 9);
+    keyLight.position.set(0, 2.8, 4);
     scene.add(keyLight);
 
-    const violetLight = new THREE.PointLight(0x8b5cf6, 7, 8);
-    violetLight.position.set(-2.4, 1.4, 3);
+    const violetLight = new THREE.PointLight(0x8b5cf6, 7.8, 8);
+    violetLight.position.set(-2.6, 1.4, 3);
     scene.add(violetLight);
 
-    const cyanLight = new THREE.PointLight(0x22d3ee, 7, 8);
-    cyanLight.position.set(2.4, -1.4, 3);
+    const cyanLight = new THREE.PointLight(0x22d3ee, 7.8, 8);
+    cyanLight.position.set(2.6, -1.4, 3);
     scene.add(cyanLight);
 
     const resize = () => {
@@ -100,36 +121,65 @@ export default function AutomationFlowHero() {
       frameId = requestAnimationFrame(animate);
       time += 0.01;
 
-      group.rotation.y = Math.sin(time * 0.24) * 0.055;
+      group.rotation.y = Math.sin(time * 0.22) * 0.06;
 
       processor.rotation.y += 0.003;
       processor.rotation.x = Math.sin(time * 0.45) * 0.025;
       processor.scale.setScalar(1 + Math.sin(time * 1.8) * 0.018);
 
-      inputCard.position.z = Math.sin(time * 1.2) * 0.035;
-      outputCard.position.z = Math.sin(time * 1.2 + 1.4) * 0.035;
+      [...inputCards, ...outputCards].forEach((card, index) => {
+        card.position.z = Math.sin(time * 1.15 + index * 0.7) * 0.04;
+      });
 
       const cycle = (time * 0.18) % 1;
 
       setPacketPosition(
         packets[0],
         cycle,
-        new THREE.Vector3(-1.62, 0.35, 0.06),
-        new THREE.Vector3(0, 0.02, 0.14),
+        new THREE.Vector3(-2.05, 0.92, 0.06),
+        new THREE.Vector3(0, 0.18, 0.16),
       );
 
       setPacketPosition(
         packets[1],
-        (cycle + 0.38) % 1,
-        new THREE.Vector3(0, -0.02, 0.14),
-        new THREE.Vector3(1.62, -0.3, 0.06),
+        (cycle + 0.2) % 1,
+        new THREE.Vector3(-2.3, 0.02, 0.06),
+        new THREE.Vector3(0, 0.0, 0.16),
       );
 
       setPacketPosition(
         packets[2],
-        (cycle + 0.55) % 1,
-        new THREE.Vector3(0, 0.02, 0.14),
-        new THREE.Vector3(1.62, -0.3, 0.06),
+        (cycle + 0.4) % 1,
+        new THREE.Vector3(-1.95, -0.86, 0.06),
+        new THREE.Vector3(0, -0.18, 0.16),
+      );
+
+      setPacketPosition(
+        packets[3],
+        (cycle + 0.18) % 1,
+        new THREE.Vector3(0, 0.18, 0.16),
+        new THREE.Vector3(2.05, 0.92, 0.06),
+      );
+
+      setPacketPosition(
+        packets[4],
+        (cycle + 0.38) % 1,
+        new THREE.Vector3(0, 0.0, 0.16),
+        new THREE.Vector3(2.3, 0.02, 0.06),
+      );
+
+      setPacketPosition(
+        packets[5],
+        (cycle + 0.58) % 1,
+        new THREE.Vector3(0, -0.18, 0.16),
+        new THREE.Vector3(1.95, -0.86, 0.06),
+      );
+
+      setPacketPosition(
+        packets[6],
+        (cycle + 0.72) % 1,
+        new THREE.Vector3(-2.05, 0.92, 0.06),
+        new THREE.Vector3(0, 0.0, 0.16),
       );
 
       renderer.render(scene, camera);
@@ -148,12 +198,9 @@ export default function AutomationFlowHero() {
         mount.removeChild(renderer.domElement);
       }
 
-      disposeObject(processor);
-      disposeObject(inputCard);
-      disposeObject(outputCard);
-      packets.forEach(disposeObject);
+      disposeObject(group);
 
-      [inputPath, outputPath].forEach((line) => {
+      lines.forEach((line) => {
         line.geometry.dispose();
 
         if (Array.isArray(line.material)) {
@@ -174,84 +221,109 @@ function createProcessor() {
   const group = new THREE.Group();
 
   const base = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.95, 1.08, 0.28, 96),
+    new THREE.CylinderGeometry(0.98, 1.1, 0.28, 128),
     new THREE.MeshPhysicalMaterial({
       color: 0xf8f7ff,
-      roughness: 0.18,
-      metalness: 0.45,
-      transmission: 0.08,
-      thickness: 0.45,
+      roughness: 0.15,
+      metalness: 0.5,
+      transmission: 0.1,
+      thickness: 0.5,
       emissive: 0x3b0764,
-      emissiveIntensity: 0.14,
+      emissiveIntensity: 0.16,
     }),
   );
 
   base.rotation.x = Math.PI / 2;
 
   const crystal = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(0.52, 5),
+    new THREE.IcosahedronGeometry(0.54, 5),
     new THREE.MeshPhysicalMaterial({
       color: 0xf5f3ff,
-      roughness: 0.07,
-      metalness: 0.32,
-      transmission: 0.25,
-      thickness: 0.65,
+      roughness: 0.06,
+      metalness: 0.34,
+      transmission: 0.28,
+      thickness: 0.7,
       emissive: 0x8b5cf6,
-      emissiveIntensity: 0.55,
+      emissiveIntensity: 0.62,
     }),
   );
 
-  crystal.position.z = 0.08;
+  crystal.position.z = 0.1;
 
-  const glow = new THREE.Mesh(
-    new THREE.SphereGeometry(1.18, 64, 64),
+  const innerGlow = new THREE.Mesh(
+    new THREE.SphereGeometry(0.58, 64, 64),
+    new THREE.MeshBasicMaterial({
+      color: 0xa78bfa,
+      transparent: true,
+      opacity: 0.16,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    }),
+  );
+
+  const outerGlow = new THREE.Mesh(
+    new THREE.SphereGeometry(1.24, 64, 64),
     new THREE.MeshBasicMaterial({
       color: 0x8b5cf6,
       transparent: true,
-      opacity: 0.055,
+      opacity: 0.06,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     }),
   );
 
   const cyanGlow = new THREE.Mesh(
-    new THREE.SphereGeometry(0.82, 64, 64),
+    new THREE.SphereGeometry(0.88, 64, 64),
     new THREE.MeshBasicMaterial({
       color: 0x22d3ee,
       transparent: true,
-      opacity: 0.035,
+      opacity: 0.04,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     }),
   );
 
-  const orbitA = createOrbit(0.92, 0xffffff, 0.2);
+  const orbitA = createOrbit(0.96, 0xffffff, 0.22);
   orbitA.rotation.x = Math.PI / 2.2;
   orbitA.rotation.y = 0.35;
 
-  const orbitB = createOrbit(1.12, 0x8b5cf6, 0.24);
+  const orbitB = createOrbit(1.16, 0x8b5cf6, 0.24);
   orbitB.rotation.x = Math.PI / 2.55;
   orbitB.rotation.y = -0.5;
+
+  const orbitC = createOrbit(0.72, 0x67e8f9, 0.2);
+  orbitC.rotation.x = Math.PI / 2.85;
+  orbitC.rotation.y = 0.9;
 
   const lightDot = new THREE.Mesh(
     new THREE.SphereGeometry(0.045, 24, 24),
     new THREE.MeshBasicMaterial({
       color: 0xffffff,
       transparent: true,
-      opacity: 0.95,
+      opacity: 0.96,
     }),
   );
 
   lightDot.position.set(-0.2, 0.18, 0.5);
 
-  group.add(glow, cyanGlow, base, crystal, orbitA, orbitB, lightDot);
+  group.add(
+    outerGlow,
+    cyanGlow,
+    innerGlow,
+    base,
+    crystal,
+    orbitA,
+    orbitB,
+    orbitC,
+    lightDot,
+  );
 
   return group;
 }
 
 function createOrbit(radius: number, color: number, opacity: number) {
   return new THREE.Mesh(
-    new THREE.TorusGeometry(radius, 0.006, 12, 160),
+    new THREE.TorusGeometry(radius, 0.006, 12, 180),
     new THREE.MeshBasicMaterial({
       color,
       transparent: true,
@@ -263,24 +335,18 @@ function createOrbit(radius: number, color: number, opacity: number) {
   );
 }
 
-function createGlassCard(
-  title: string,
-  detail: string,
-  x: number,
-  y: number,
-  color: number,
-) {
+function createGlassCard(node: FlowNode) {
   const group = new THREE.Group();
-  group.position.set(x, y, 0);
+  group.position.set(node.x, node.y, 0);
 
-  const texture = createCardTexture(title, detail, color);
+  const texture = createCardTexture(node.title, node.detail, node.color);
 
   const glow = new THREE.Mesh(
-    new THREE.PlaneGeometry(1.48, 0.8),
+    new THREE.PlaneGeometry(1.2, 0.66),
     new THREE.MeshBasicMaterial({
-      color,
+      color: node.color,
       transparent: true,
-      opacity: 0.075,
+      opacity: 0.08,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
       side: THREE.DoubleSide,
@@ -288,7 +354,7 @@ function createGlassCard(
   );
 
   const face = new THREE.Mesh(
-    new THREE.PlaneGeometry(1.22, 0.58),
+    new THREE.PlaneGeometry(0.98, 0.48),
     new THREE.MeshBasicMaterial({
       map: texture,
       transparent: true,
@@ -319,15 +385,15 @@ function createCardTexture(title: string, detail: string, color: number) {
     canvas.width,
     canvas.height,
   );
-  gradient.addColorStop(0, "rgba(255,255,255,0.22)");
-  gradient.addColorStop(0.55, "rgba(255,255,255,0.1)");
-  gradient.addColorStop(1, "rgba(255,255,255,0.035)");
+  gradient.addColorStop(0, "rgba(255,255,255,0.2)");
+  gradient.addColorStop(0.55, "rgba(255,255,255,0.09)");
+  gradient.addColorStop(1, "rgba(255,255,255,0.03)");
 
-  roundRect(context, 34, 42, 700, 300, 78);
+  roundRect(context, 34, 42, 700, 300, 76);
   context.fillStyle = gradient;
   context.fill();
 
-  context.strokeStyle = "rgba(255,255,255,0.28)";
+  context.strokeStyle = "rgba(255,255,255,0.26)";
   context.lineWidth = 4;
   context.stroke();
 
@@ -335,17 +401,17 @@ function createCardTexture(title: string, detail: string, color: number) {
   context.shadowBlur = 32;
   context.fillStyle = accent;
   context.beginPath();
-  context.arc(126, 192, 24, 0, Math.PI * 2);
+  context.arc(124, 192, 23, 0, Math.PI * 2);
   context.fill();
   context.shadowBlur = 0;
 
   context.font = "700 58px Inter, Arial, sans-serif";
   context.fillStyle = "rgba(255,255,255,0.97)";
-  context.fillText(title, 178, 188);
+  context.fillText(title, 176, 188);
 
   context.font = "500 26px Inter, Arial, sans-serif";
   context.fillStyle = "rgba(255,255,255,0.54)";
-  context.fillText(detail, 178, 246);
+  context.fillText(detail, 176, 246);
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
@@ -357,18 +423,18 @@ function createCardTexture(title: string, detail: string, color: number) {
 function createLine(start: THREE.Vector3, end: THREE.Vector3, color: number) {
   const curve = new THREE.QuadraticBezierCurve3(
     start,
-    new THREE.Vector3((start.x + end.x) / 2, (start.y + end.y) / 2, 0.22),
+    new THREE.Vector3((start.x + end.x) / 2, (start.y + end.y) / 2, 0.26),
     end,
   );
 
   const geometry = new THREE.BufferGeometry().setFromPoints(
-    curve.getPoints(72),
+    curve.getPoints(88),
   );
 
   const material = new THREE.LineBasicMaterial({
     color,
     transparent: true,
-    opacity: 0.24,
+    opacity: 0.26,
     blending: THREE.AdditiveBlending,
   });
 
@@ -379,18 +445,18 @@ function createPacket(color: number) {
   const group = new THREE.Group();
 
   const core = new THREE.Mesh(
-    new THREE.SphereGeometry(0.06, 24, 24),
+    new THREE.SphereGeometry(0.055, 24, 24),
     new THREE.MeshBasicMaterial({
       color,
     }),
   );
 
   const glow = new THREE.Mesh(
-    new THREE.SphereGeometry(0.22, 32, 32),
+    new THREE.SphereGeometry(0.2, 32, 32),
     new THREE.MeshBasicMaterial({
       color,
       transparent: true,
-      opacity: 0.12,
+      opacity: 0.13,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     }),
@@ -412,10 +478,10 @@ function setPacketPosition(
   packet.position.set(
     lerp(start.x, end.x, eased),
     lerp(start.y, end.y, eased),
-    Math.sin(progress * Math.PI) * 0.2,
+    Math.sin(progress * Math.PI) * 0.23,
   );
 
-  packet.scale.setScalar(0.82 + Math.sin(progress * Math.PI) * 0.75);
+  packet.scale.setScalar(0.8 + Math.sin(progress * Math.PI) * 0.82);
   packet.visible = progress > 0.04 && progress < 0.96;
 }
 
