@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import AutomationOrb from "@/components/AutomationOrb";
+
 type Lang = "en" | "pl";
 
 const content = {
@@ -184,11 +186,8 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="relative mx-auto my-6 flex h-44 max-w-sm items-center justify-center">
-                <div className="absolute h-40 w-40 rounded-full border border-violet-300/20 bg-violet-500/5 shadow-[0_0_80px_rgba(124,58,237,0.35)]" />
-                <div className="absolute h-28 w-28 rounded-full border border-cyan-300/20 bg-cyan-400/5 shadow-[0_0_60px_rgba(34,211,238,0.25)]" />
-                <div className="absolute h-16 w-16 rounded-full border border-white/20 bg-white/10 backdrop-blur-xl" />
-                <div className="h-8 w-8 rounded-full bg-white shadow-[0_0_70px_rgba(255,255,255,0.7)]" />
+              <div className="relative mx-auto my-6 h-52 max-w-sm">
+                <AutomationOrb />
 
                 {t.visualSteps.map((step, index) => (
                   <div
